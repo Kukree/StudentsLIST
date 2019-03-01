@@ -4,143 +4,121 @@ import os
 clear = lambda: os.system('cls')
 
 class Student:
-    def contentChecking(self):
-        pass
-
-    def fileChecking(self):
+    def __init__(self):
         try:
-            # Проверка, существует ли такой файл
-            studentsJSON = open('students.json').read()
+            # Если в studentsJSON что то есть
+            # Десерилизовать данные в нем в обычный список
+            studentslist = open("students.json").read()
+            if studentslist:
+                self.studentslist = json.loads(studentslist)
+            else:
+                self.studentslist = []
+            # Иначе - создать новый список
+
+        except FileNotFoundError:
+            print("Ошибка! Для начала создайте файл students.json")
+            input("Нажмите любую клавишу для выхода...")
+            exit()
+        except json.JSONDecodeError:
+            print("Ошибка! Невозможно обработать файл students.json")
+            input("Нажмите любую клавишу для выхода...")
+            exit()
         except:
-            # Если нет...
-            clear()
-            print('Не найден файл students.json')
-            input('Нажмите любую клавишу для выхода...')
-        return studentsJSON
+            print("Неизвестная ошибка")
+            input("Нажмите любую клавишу для выхода...")
+            exit()
 
     def viewStudentList(self):
-        student = Student()
-        studentsJSON = student.fileChecking()
-        
         # Если в studentsJSON что то есть
-        # Десерилизовать данные в нем в обычный список
-        if studentsJSON:
-            studentlist = json.loads(studentsJSON)
+        if self.studentslist:
+            i = 1
+            clear()
+            for student in self.studentslist:
+                print(str(i) + " " + student)
+                i += 1
+            print("\nКоличество студентов: " + str(len(self.studentslist)))
         else:
             clear()
             print("students.json пуст!")
-            input("Нажмите любую клавишу для выхода...")
-            exit()
-        # Иначе - вывод ошибки и выход
-
-        # Перебор списка с данными студентов и вывод каждого
-        i = 1
-        clear()
-        for student in studentlist:
-            print(str(i) + " " + student)
-            i += 1
-        print("\nКоличество студентов: " + str(len(studentlist)))
-        input("Нажмите любую клавишу для выхода...")
-
-    def addStudent(self):
-        student = Student()
-        studentsJSON = student.fileChecking()
-
-        # Если в studentsJSON что то есть
-        # Десерилизовать данные в нем в обычный список
-        if studentsJSON:
-            studentslist = json.loads(studentsJSON)
-        else:
-            studentslist = []
-        # Иначе - создать новый список
-
-        clear()
-        studentName = input("Имя нового студента: ")
-        if len(studentName) < 3:
-            print("\nИмя студента короче трех символов или пустое")
-            input("Нажмите любую клавишу для выхода...")
-            exit()
-        # Если длина имени студента короче трех символов - вывод ошибки
+        # Иначе - вывод сообщения
+    def addStudent(self, studentName = None, studentSurname = None):
+        if not studentName:
+            if len(studentName) < 3:
+                print("\nИмя студента короче трех символов или пустое")
+            # Если длина имени студента короче трех символов - вывод ошибки
             
-        studentSurname = input("Фамилия нового студента: ")
-        if len(studentSurname) < 3:
-            print("\nФамилия студента короче трех символов или пустое")
-            input("Нажмите любую клавишу для выхода...")
-            exit()
-        # Если длина фамилии студента короче трех символов - вывод ошибки
+        if not studentSurname:
+            studentSurname = input("Фамилия нового студента: ")
+            if len(studentSurname) < 3:
+                print("\nФамилия студента короче трех символов или пустое")
+            # Если длина фамилии студента короче трех символов - вывод ошибки
 
         # Обьединение имени и фамилии студента в одну переменную
         student = studentName + " " + studentSurname
 
-        if student in studentslist:
-            clear()
-            print("Студент " + student + " уже есть в базе!")
-            input("Нажмите любую клавишу для выхода...")
-        else:
-            studentslist.append(student)
-            # Запись в конец списка нового студента
-
-            # Запись нового значения списка в тот же файл
-            open('students.json' , 'w').write(json.dumps(studentslist))
+        if not student in self.studentslist:
+            # Добавление нового элемента в конец списка
+            self.studentslist.append(student)
             clear()
             print("Студент " + student + " успешно добавлен в базу!")
-            input("Нажмите любую клавишу для выхода...")
-
-    def deleteStudent(self):
-        student = Student()
-        studentsJSON = student.fileChecking()
-
-        # Если в studentsJSON что то есть
-        # Десерилизовать данные в нем в обычный список
-        if studentsJSON:
-            studentslist = json.loads(studentsJSON)
         else:
-            print("Файл students.json пуст!")
-            input("Нажмите любую клавишу для выхода...")
-            exit()
-        # Иначе - вывод ошибки и выход
+            clear()
+            print("Студент " + student + " уже есть в базе!")
 
-        clear()
-        studentName = input("Имя удаляемого студента: ")
-        if len(studentName) < 3:
-            print("\nИмя студента короче трех символов или пустое")
-            input("Нажмите любую клавишу для выхода...")
-            exit()
-        # Если длина имени студента короче трех символов - вывод ошибки
-
-        studentSurname = input("Фамилия удаляемого студента: ")
-        if len(studentSurname) < 3:
-            print("\nФамилия студента короче трех символов или пустое")
-            input("Нажмите любую клавишу для выхода...")
-            exit()
-        # Если длина фамилии студента короче трех символов - вывод ошибки
+    def deleteStudent(self, studentName = None, studentSurname = None):
+        if not studentName:
+            if len(studentName) < 3:
+                print("\nИмя студента короче трех символов или пустое")
+            # Если длина имени студента короче трех символов - вывод ошибки
+        if not studentSurname:
+            studentSurname = input("Фамилия удаляемого студента: ")
+            if len(studentSurname) < 3:
+                print("\nФамилия студента короче трех символов или пустое")
+            # Если длина фамилии студента короче трех символов - вывод ошибки
 
         # Обьединяем имя и фамилию студента
         student = studentName + " " + studentSurname
 
-        # Попытка удалить студента из базы
-        try:
-            studentslist.remove(student)
-            open('students.json', 'w').write(json.dumps(studentslist))
+        # Если студент найден в базе
+        if student in self.studentslist:
             clear()
-            print("Студент " + student + " успешно удален!")
-            input("Нажмите любую клавишу для выхода...")
-        except:
+            self.studentslist.remove(student)
+            print("Студент " + student + " успешно удален из базы!")
+        else:
             clear()
             print("Студент " + student + " не найден в базе")
-            input("Нажмите любую клавишу для выхода...")
         # Если такого студента не существует...
-
-
-student = Student()
+        
+    def exit(self, save = True):
+        if save:
+            open('students.json' , 'w').write(json.dumps(self.studentslist))
+        exit()
 
 if __name__ == "__main__":
-    print("Добро пожаловать в программу StudentsLIST! \n(1 - Список студентов... 2 - Добавить студента... 3 - Удалить студента...)")
+    student = Student()
+    while True:
+        print("\n" * 4, "#" * 20, sep="")
+        print("[1 - Список студентов] \n[2 - Добавить студента] \n[3 - Удалить студента] \n[4 - Выход]")
 
-    command = int(input("\nКоманда: "))
-if command == 1: # Показ списка студентов
-    student.viewStudentList()
-elif command == 2: # Добавление студента в базу
-    student.addStudent()
-elif command == 3: # Удаление студента из базы
-    student.deleteStudent()
+        command = input("\n>>> ")
+        if command == '1': # Показ списка студентов
+            clear()
+            student.viewStudentList()
+        elif command == '2': # Добавление студента в базу
+            print("\n/Добавление студента/\n")
+            studentName = input("Имя нового студента: ")
+            studentSurname = input("Фамилия нового студента: ")
+            student.addStudent(studentName, studentSurname)
+        elif command == '3': # Удаление студента из базы
+            print("\n/Удаление студента/\n")
+            studentName = input("Имя удаляемого студента: ")
+            studentSurname = input("Фамилия удаляемого студента: ")
+            student.deleteStudent(studentName, studentSurname)
+        elif command == '4': # Выход
+            print("\n/Выход/\n")
+            command = input("Сохранить изменения? [Y/N] > ")
+            if command == 'Y': student.exit()
+            elif command == 'N': student.exit(False)
+            else: print("Неизвестное значение")
+        else:
+            print("Неизвестная команда")
