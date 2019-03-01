@@ -4,6 +4,9 @@ import os
 clear = lambda: os.system('cls')
 
 class Student:
+
+    changed = False
+
     def __init__(self):
         try:
             # Если в studentsJSON что то есть
@@ -34,7 +37,7 @@ class Student:
             i = 1
             clear()
             for student in self.studentslist:
-                print(str(i) + " " + student)
+                print(str(i) + "]" + " " + student)
                 i += 1
             print("\nКоличество студентов: " + str(len(self.studentslist)))
         else:
@@ -61,6 +64,7 @@ class Student:
             self.studentslist.append(student)
             clear()
             print("Студент " + student + " успешно добавлен в базу!")
+            self.changed = True
         else:
             clear()
             print("Студент " + student + " уже есть в базе!")
@@ -84,6 +88,7 @@ class Student:
             clear()
             self.studentslist.remove(student)
             print("Студент " + student + " успешно удален из базы!")
+            self.changed = True
         else:
             clear()
             print("Студент " + student + " не найден в базе")
@@ -105,20 +110,36 @@ if __name__ == "__main__":
             clear()
             student.viewStudentList()
         elif command == '2': # Добавление студента в базу
+            clear()
             print("\n/Добавление студента/\n")
-            studentName = input("Имя нового студента: ")
-            studentSurname = input("Фамилия нового студента: ")
+            student.viewStudentList()
+            studentName = input("\nИмя нового студента: ")
+            clear()
+            student.viewStudentList()
+            print("\nИмя: " + studentName)
+            studentSurname = input("\nФамилия нового студента: ")
             student.addStudent(studentName, studentSurname)
         elif command == '3': # Удаление студента из базы
+            clear()
             print("\n/Удаление студента/\n")
-            studentName = input("Имя удаляемого студента: ")
-            studentSurname = input("Фамилия удаляемого студента: ")
+            student.viewStudentList()
+            studentName = input("\nИмя удаляемого студента: ")
+            clear()
+            student.viewStudentList()
+            print("\nИмя: " + studentName)
+            studentSurname = input("\nФамилия удаляемого студента: ")
             student.deleteStudent(studentName, studentSurname)
         elif command == '4': # Выход
+            clear()
             print("\n/Выход/\n")
-            command = input("Сохранить изменения? [Y/N] > ")
-            if command == 'Y': student.exit()
-            elif command == 'N': student.exit(False)
-            else: print("Неизвестное значение")
+            if student.changed:
+                command = input("Сохранить изменения? [Y/N] > ")
+                if command == 'Y': student.exit()
+                elif command == 'N': student.exit(False)
+                else: print("Неизвестное значение")
+            elif not student.changed:
+                clear()
+                input("Нажмите любую клавишу для выхода...")
+                student.exit(False)
         else:
-            print("Неизвестная команда")
+            print("Неизвестная команда!")
