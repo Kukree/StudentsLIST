@@ -9,7 +9,7 @@ class Student:
     changed = False  # Проверка на внесенные изменения
 
     # Словарь сообщений
-    messages = {'exit': "Нажмите любую клавишу для выхода...",
+    messages = {'exit': "Нажмите любую клавишу для выхода... ",
     'filenotfound': "Ошибка! Файл students.json не найден!\n",
     'jsondecode_error': "Ошибка! Невозможно обработать файл students.json\n",
     'unknownerror': "Неизвестная ошибка\n",
@@ -147,7 +147,6 @@ if __name__ == "__main__":
                     input(student.messages['exit'])
                     clear()
             elif not student.changed:  # Если изменения не внесены - выйти из программы
-                clear()
                 input(student.messages['exit'])
                 student.exit(False)
         else:  # Неизвестная команда
