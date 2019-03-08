@@ -108,26 +108,21 @@ if __name__ == "__main__":
 
         command = input(student.messages['command'])
         if command == '1':  # Показ списка студентов
-            clear()
             student.viewstudentlist()
         elif command == '2':  # Добавление студента
-            clear()
             student.viewstudentlist()
             print("\n", "#" * 20, sep="")  # Разделитель
             print(student.messages['studentadding'])
             studentname = input(student.messages['newstudentname'])  # Имя нового студента
-            clear()
             student.viewstudentlist()
             print("\nИмя: " + studentname)
             studentsurname = input(student.messages['newstudentsurname'])  # Фамилия нового студента
             student.addstudent(studentname, studentsurname)  # Добавление студента в базу
         elif command == '3':  # Удаление студента
-            clear()
             student.viewstudentlist()
             print("\n", "#" * 20, sep="")  # Разделитель
             print(student.messages['studentremoving'])
             studentname = input(student.messages['deletestudentname'])  # Имя удаляемого студента
-            clear()
             student.viewstudentlist()
             print("\nИмя: " + studentname)
             studentsurname = input(student.messages['deletestudentsurname'])  # Фамилия удаляемого студента
