@@ -31,11 +31,11 @@ class Student:
         try:
             # Если в studentsJSON что то есть
             # Десерилизовать данные в нем в обычный список
-            studentslist = open("students.json").read()
-            if studentslist:
-                self.studentslist = json.loads(studentslist)
+            students_list = open("students.json").read()
+            if students_list:
+                self.students_list = json.loads(students_list)
             else:
-                self.studentslist = []
+                self.students_list = []
             # Иначе - создать новый список
 
         except FileNotFoundError:  # Файл не найден
@@ -51,27 +51,27 @@ class Student:
             input(self.messages['exit'])
             exit()
 
-    def viewstudentlist(self):
+    def view_student_list(self):
         # Если в studentsJSON что то есть
-        if self.studentslist:
-            i = 1
+        if self.students_list:
+            student_number = 1
             clear()
-            for student in self.studentslist:  # Перебрать список и вывести каждого студента в новой строке
-                print(str(i) + "]" + " " + student)
-                i += 1
-            print("\nКоличество студентов: " + str(len(self.studentslist)))  # Вывод количества студентов
+            for student in self.students_list:  # Перебрать список и вывести каждого студента в новой строке
+                print(str(student_number) + "]" + " " + student)
+                student_number += 1
+            print("\nКоличество студентов: " + str(len(self.students_list)))  # Вывод количества студентов
         else:
             clear()
             print(self.messages['blankfile'])
         # Иначе - вывод сообщение о пустом файле
 
-    def addstudent(self, studentname=None, studentsurname=None):
+    def add_student(self, studentname=None, studentsurname=None):
         # Обьединение имени и фамилии студента в одну переменную
-        student = studentname + " " + studentsurname
+        student = f"{studentname} {studentsurname}"
 
-        if student not in self.studentslist:
+        if student not in self.students_list:
             # Добавление нового элемента в конец списка
-            self.studentslist.append(student)
+            self.students_list.append(student)
             clear()
             print("Студент " + student + " успешно добавлен в базу!")
             self.changed = True  # Внесены изменения
@@ -79,14 +79,14 @@ class Student:
             clear()
             print("Студент " + student + " уже есть в базе!")
 
-    def deletestudent(self, studentname=None, studentsurname=None):
+    def delete_student(self, studentname=None, studentsurname=None):
         # Обьединяем имя и фамилию студента
-        student = studentname + " " + studentsurname
+        student = f"{studentname} {studentsurname}"
 
         # Если студент найден в базе
-        if student in self.studentslist:
+        if student in self.students_list:
             clear()
-            self.studentslist.remove(student)  # Удаление студента из базы
+            self.students_list.remove(student)  # Удаление студента из базы
             print("Студент " + student + " успешно удален из базы!")
             self.changed = True  # Внесены изменения
         else:  # Если такого студента не существует...
@@ -95,7 +95,7 @@ class Student:
         
     def exit(self, save=True):
         if save:  # Если передана команда сохранить изменения
-            open('students.json', 'w').write(json.dumps(self.studentslist))
+            open('students.json', 'w').write(json.dumps(self.students_list))
             # ...сериализовать изменения в student.json файл
         exit()
 
@@ -103,38 +103,38 @@ class Student:
 if __name__ == "__main__":
     student = Student()  # Создание экземпляра класса Student
     while True:
-        print("\n" * 4, "#" * 20, sep="")  # Разделитель
+        print("\n" * 4, "#" * 20)  # Разделитель
         print(student.messages['commandslist'])  # Список команд
 
         command = input(student.messages['command'])
         if command == '1':  # Показ списка студентов
-            student.viewstudentlist()
+            student.view_student_list()
         elif command == '2':  # Добавление студента
-            student.viewstudentlist()
-            print("\n", "#" * 20, sep="")  # Разделитель
+            student.view_student_list()
+            print("\n", "#" * 20)  # Разделитель
             print(student.messages['studentadding'])
-            studentname = input(student.messages['newstudentname'])  # Имя нового студента
-            student.viewstudentlist()
-            print("\nИмя: " + studentname)
-            studentsurname = input(student.messages['newstudentsurname'])  # Фамилия нового студента
-            student.addstudent(studentname, studentsurname)  # Добавление студента в базу
+            student_name = input(student.messages['newstudentname'])  # Имя нового студента
+            student.view_student_list()
+            print("\nИмя: " + student_name)
+            student_surname = input(student.messages['newstudentsurname'])  # Фамилия нового студента
+            student.add_student(student_name, student_surname)  # Добавление студента в базу
         elif command == '3':  # Удаление студента
-            student.viewstudentlist()
-            print("\n", "#" * 20, sep="")  # Разделитель
+            student.view_student_list()
+            print("\n", "#" * 20)  # Разделитель
             print(student.messages['studentremoving'])
-            studentname = input(student.messages['deletestudentname'])  # Имя удаляемого студента
-            student.viewstudentlist()
-            print("\nИмя: " + studentname)
-            studentsurname = input(student.messages['deletestudentsurname'])  # Фамилия удаляемого студента
-            student.deletestudent(studentname, studentsurname)  # Удаление студента из базы
+            student_name = input(student.messages['deletestudentname'])  # Имя удаляемого студента
+            student.view_student_list()
+            print("\nИмя: " + student_name)
+            student_surname = input(student.messages['deletestudentsurname'])  # Фамилия удаляемого студента
+            student.delete_student(student_name, student_surname)  # Удаление студента из базы
         elif command == '4':  # Выход
             clear()
             print(student.messages['leaving'])
             if student.changed:  # Если внесены изменения - вывести предложение о сохранении изменений в файл
-                command = input(student.messages['savechanges'])
-                if command == 'Y' or command == 'y':
+                command = input(student.messages['savechanges']).lower()
+                if command == 'y':
                     student.exit()
-                elif command == 'N' or command == 'n':
+                elif command == 'n':
                     student.exit(False)
                 else:
                     clear()
