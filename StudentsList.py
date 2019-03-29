@@ -1,7 +1,7 @@
-import json
-import os
+from json import loads, dumps
+from os import system
 
-clear = lambda: os.system('cls')
+clear = lambda: system('cls')
 
 
 class Student:
@@ -33,7 +33,7 @@ class Student:
             # If there's something in students_list
             # Deserialize data to list
             if students_list:
-                self.students_list = json.loads(students_list)
+                self.students_list = loads(students_list)
             else:
                 self.students_list = []
             # Otherwise - create new list
@@ -95,7 +95,7 @@ class Student:
         
     def exit(self, save=True):
         if save:  # If command to save changes is sent
-            open('students.json', 'w').write(json.dumps(self.students_list))
+            open('students.json', 'w').write(dumps(self.students_list))
             # ...serialize changes to student.json file
         exit()
 
