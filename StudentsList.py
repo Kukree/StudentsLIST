@@ -6,8 +6,6 @@ clear = lambda: system('cls')
 
 class Student:
 
-    changed = False  # Check for changes
-
     # Messages dict
     messages = {'exit': "Нажмите любую клавишу для выхода... ",
     'filenotfound': "Ошибка! Файл students.json не найден!\n",
@@ -74,7 +72,6 @@ class Student:
             self.students_list.append(student)
             clear()
             print("Студент " + student + " успешно добавлен в базу!")
-            self.changed = True  # Changed
         else:
             clear()
             print("Студент " + student + " уже есть в базе!")
@@ -88,7 +85,6 @@ class Student:
             clear()
             self.students_list.remove(student)  # Delete student
             print("Студент " + student + " успешно удален из базы!")
-            self.changed = True  # Changed
         else:  # If student does not exist
             clear()
             print("Студент " + student + " не найден в базе")
@@ -130,7 +126,8 @@ if __name__ == "__main__":
         elif command == '4':  # Exit
             clear()
             print(student.messages['leaving'])
-            if student.changed:  # If changed - print save suggestion
+            file_checking = loads(open('students.json').read())
+            if student.students_list != file_checking:  # If changed - print save suggestion
                 command = input(student.messages['savechanges']).lower()
                 if command == 'y':
                     student.exit()
@@ -141,7 +138,7 @@ if __name__ == "__main__":
                     print(student.messages['unknownvalue'])
                     input(student.messages['exit'])
                     clear()
-            elif not student.changed:  # If not changed - exit from program
+            elif student.students_list == file_checking:  # If not changed - exit from program
                 input(student.messages['exit'])
                 student.exit(False)
         else:  # Unknown command
