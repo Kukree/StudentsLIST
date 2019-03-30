@@ -1,4 +1,4 @@
-from json import loads, dumps
+from json import loads, dumps, JSONDecodeError
 from os import system
 
 clear = lambda: system('cls')
@@ -40,7 +40,7 @@ class Student:
             print(self.messages['filenotfound'])
             input(self.messages['exit'])
             exit()
-        except json.JSONDecodeError:  # Deserialization error
+        except JSONDecodeError:  # Deserialization error
             print(self.messages['jsondecode_error'])
             input(self.messages['exit'])
             exit()
