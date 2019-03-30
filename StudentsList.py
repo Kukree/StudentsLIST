@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 
-from json import loads, dumps
+from json import loads, dumps, JSONDecodeError
 from os import system
 
 clear = lambda: system('clear')
 
 
 class Student:
-
-    changed = False  # Check for changes
 
     # Messages dict
     messages = {'exit': "Нажмите любую клавишу для выхода... ",
@@ -44,7 +42,7 @@ class Student:
             print(self.messages['filenotfound'])
             input(self.messages['exit'])
             exit()
-        except json.JSONDecodeError:  # Deserialization error
+        except JSONDecodeError:  # Deserialization error
             print(self.messages['jsondecode_error'])
             input(self.messages['exit'])
             exit()
@@ -132,7 +130,8 @@ if __name__ == "__main__":
         elif command == '4':  # Exit
             clear()
             print(student.messages['leaving'])
-            if student.changed:  # If changed - print save suggestion
+            file_checking = loads(open('students.json').read())
+            if student.students_list != file_checking:  # If changed - print save suggestion
                 command = input(student.messages['savechanges']).lower()
                 if command == 'y':
                     student.exit()
@@ -143,7 +142,7 @@ if __name__ == "__main__":
                     print(student.messages['unknownvalue'])
                     input(student.messages['exit'])
                     clear()
-            elif not student.changed:  # If not changed - exit from program
+            elif student.students_list == file_checking:  # If not changed - exit from program
                 input(student.messages['exit'])
                 student.exit(False)
         else:  # Unknown command
