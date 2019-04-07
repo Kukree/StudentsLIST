@@ -146,4 +146,5 @@ if __name__ == "__main__":
                 input(student.messages['exit'])
                 student.exit(False)
         else:  # Unknown command
+            clear()
             print(student.messages['unknowncommand'])
