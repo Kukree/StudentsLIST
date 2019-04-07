@@ -1,4 +1,4 @@
-from json import loads, dumps, JSONDecodeError
+﻿from json import loads, dumps, JSONDecodeError
 from os import system
 
 clear = lambda: system('cls')
@@ -142,4 +142,5 @@ if __name__ == "__main__":
                 input(student.messages['exit'])
                 student.exit(False)
         else:  # Unknown command
+            clear()
             print(student.messages['unknowncommand'])
