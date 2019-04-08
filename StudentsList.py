@@ -106,7 +106,7 @@ if __name__ == "__main__":
         print("\n" * 4, "#" * 20)  # Horizontal line
         print(student.messages['commandslist'])  # Command list
 
-        command = input(student.messages['command'])
+        command = input(student.messages['command']).replace(" ", "")
         if command == '1':  # View list of students
             student.view_student_list()
         elif command == '2':  # Add student
